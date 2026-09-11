@@ -32,11 +32,10 @@ export function setState(changes) {
 
   // Save the latest state
   localStorage.setItem("habit-state", JSON.stringify(state));
-  console.log("saving to localStorage", state);
 
   // Tell the app that state changed
   listeners.forEach(function (listener) {
-    listener();
+    listener(changes);
   });
 }
 

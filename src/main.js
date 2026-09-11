@@ -1,14 +1,24 @@
 import "./style.css";
-import { setState, subscribe } from "./store.js";
-import { renderRoute, initRouter } from "./router.js";
+import { subscribe } from "./store.js";
+import { renderRoute } from "./router.js";
+import { initRouter } from "./router.js";
 
-// setState({
-//   habits: [],
-// });
+const routeRelevantKeys = {
+  "#/habits": ["habits", "habitFilter"],
+  "#/timer": ["timer"],
+  "#/board": ["cards"],
+};
 
-subscribe(() => {
-  renderRoute();
+subscribe((changes) => {
+  const currentHash = location.hash || "#/habits";
+  const relevantKeys = routeRelevantKeys[currentHash] || [];
+  const changedKeys = Object.keys(changes);
+
+  const isRelevant = changedKeys.some((key) => relevantKeys.includes(key));
+
+  if (isRelevant) {
+    renderRoute();
+  }
 });
 
 initRouter();
-
